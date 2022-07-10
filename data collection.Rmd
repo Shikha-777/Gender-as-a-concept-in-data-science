@@ -62,4 +62,21 @@ new_dataset<- df %>%filter(participation=="all three"|participation=="first and 
 new_dataset
 ```
 
-#
+#filtering m to f and f to m participants
+```{r}
+new_df <- (da34375.0001) %>% 
+mutate(transition = case_when(
+  
+  ((SEX_DB=="(1) Male") & (BL_R_GENDER
+=="(2) Female")) ~ "MtoF",
+
+   ((SEX_DB=="(2) Female") & (BL_R_GENDER
+=="(2) Male")) ~ "FtoM",
+ 
+   
+    (TRUE)~ "No"
+))
+
+new_df%>%select(transition)
+#%>%filter(transition=="MtoF"|transition=="FtoM")
+```
