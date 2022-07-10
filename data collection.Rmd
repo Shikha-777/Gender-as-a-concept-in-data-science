@@ -1,0 +1,60 @@
+---
+title: "gender"
+output: html_document
+date: '2022-07-10'
+---
+
+---
+title: "Untitled"
+output: html_document
+date: '2022-07-09'
+---
+
+
+
+```{r}
+all_three=(da34375.0001) %>% filter(FU1_MARKER=="(1) Completed Wave",FU2_MARKER=="(1) Completed Wave", BL_MARKER=="(1) Completed Wave")%>%mutate(participation="all three")%>% select(SU_ID,participation)
+
+all_three
+
+```
+
+```{r}
+first_two=(da34375.0001) %>% filter(FU1_MARKER=="(1) Completed Wave", BL_MARKER=="(1) Completed Wave")%>%mutate(participation="first two")%>% select(SU_ID,participation)
+
+first_two
+```
+
+```{r}
+first_last=(da34375.0001) %>% filter(FU2_MARKER=="(1) Completed Wave", BL_MARKER=="(1) Completed Wave")%>% mutate(participation=c("first and last"))%>%select(SU_ID,participation)
+
+first_last
+```
+
+```{r}
+all=(da34375.0001) %>% filter(FU1_MARKER=="(1) Completed Wave",FU2_MARKER=="(1) Completed Wave", BL_MARKER=="(1) Completed Wave"|FU2_MARKER=="(1) Completed Wave", BL_MARKER=="(1) Completed Wave")%>% select(SU_ID)
+
+all
+```
+
+```{r}
+df <- da34375.0001 %>% 
+mutate(participation = case_when(
+  
+  ((FU2_MARKER=="(1) Completed Wave") & (BL_MARKER=="(1) Completed Wave")&(FU1_MARKER=="(1) Completed Wave")) ~ "all three",
+
+    ((FU2_MARKER=="(1) Completed Wave") & (BL_MARKER=="(1) Completed Wave")) ~ "first and last",
+   
+    
+    
+    ((BL_MARKER=="(1) Completed Wave")&(FU1_MARKER=="(1) Completed Wave")) ~ "first two"
+
+))
+
+df
+```
+
+```{r}
+new_df<-df%>%select(participation,SU_ID,BL_MARKER,FU1_MARKER,FU2_MARKER)
+new_df
+```
