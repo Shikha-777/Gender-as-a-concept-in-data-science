@@ -3,27 +3,26 @@ title: "gender"
 output: html_document
 date: '2022-07-10'
 ---
-
----
-title: "Untitled"
-output: html_document
-date: '2022-07-09'
----
-
-
-
 ```{r}
-all_three=(da34375.0001) %>% filter(FU1_MARKER=="(1) Completed Wave",FU2_MARKER=="(1) Completed Wave", BL_MARKER=="(1) Completed Wave")%>%mutate(participation="all three")%>% select(SU_ID,participation)
+library(dplyr)
+```
+
+#1 Participation ID for participants who took part in all three surveys 
+```{r}
+all_three=(da34375.0001) %>% filter(FU1_MARKER=="(1) Completed Wave",FU2_MARKER=="(1) Completed Wave", BL_MARKER=="(1) Completed Wave")%>% select(SU_ID)
 
 all_three
 
 ```
 
+#2 Participation ID for participants who took part in baseline and first follow up survey
 ```{r}
-first_two=(da34375.0001) %>% filter(FU1_MARKER=="(1) Completed Wave", BL_MARKER=="(1) Completed Wave")%>%mutate(participation="first two")%>% select(SU_ID,participation)
+first_two=(da34375.0001) %>% filter(FU1_MARKER=="(1) Completed Wave", BL_MARKER=="(1) Completed Wave")%>% select(SU_ID)
 
 first_two
 ```
+
+#3 Participation ID for participants who took part in baseline and second follow up. 
 
 ```{r}
 first_last=(da34375.0001) %>% filter(FU2_MARKER=="(1) Completed Wave", BL_MARKER=="(1) Completed Wave")%>% mutate(participation=c("first and last"))%>%select(SU_ID,participation)
@@ -31,12 +30,8 @@ first_last=(da34375.0001) %>% filter(FU2_MARKER=="(1) Completed Wave", BL_MARKER
 first_last
 ```
 
-```{r}
-all=(da34375.0001) %>% filter(FU1_MARKER=="(1) Completed Wave",FU2_MARKER=="(1) Completed Wave", BL_MARKER=="(1) Completed Wave"|FU2_MARKER=="(1) Completed Wave", BL_MARKER=="(1) Completed Wave")%>% select(SU_ID)
 
-all
-```
-
+#4 Creating a newdata set consisting of all columns from the original dataset along with a new "participation" column which tracks if the participant participated in "all three","first and last", "first two" or NA.
 ```{r}
 df <- da34375.0001 %>% 
 mutate(participation = case_when(
@@ -54,7 +49,17 @@ mutate(participation = case_when(
 df
 ```
 
+#5 Check to see code #4 works accurately
 ```{r}
-new_df<-df%>%select(participation,SU_ID,BL_MARKER,FU1_MARKER,FU2_MARKER)
-new_df
+new<-df%>%select(participation,SU_ID,BL_MARKER,FU1_MARKER,FU2_MARKER)
+new
 ```
+
+#6 Filtering for "participation" column with"all three","first and last", "first two"
+
+```{r}
+new_dataset<- df %>%filter(participation=="all three"|participation=="first and last"|participation=="first two")
+new_dataset
+```
+
+#
