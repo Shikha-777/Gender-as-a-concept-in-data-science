@@ -1,0 +1,26 @@
+Week 2: June 20
+
+       
+ Examined open-source gender-related data and identified possible data sources from studies that measured both gender identity and sex at birth.
+ Read doing gender by Candace West and Don H Zimmerman and gained  an understanding of the dynamics of social circumstances which dictate how people actively create gender differences
+Read the book Data for the People and gained an understanding of social data, the fragility of data privacy, and the need for data transparency and agency in the modern world.
+
+
+ Week 3:  June 27
+
+Identified variable of interest from Gates Millennium Survey
+Loaded the data from the Gates Millennium Survey in R and filtered the data to identify participants who participated in baseline, first, and second follow-up surveys.
+Reflected on the ideas of gender identity and how it relates to data identity.
+Read the research papers- What Sexual and Gender Minority People Want Researchers
+to Know About Sexual Orientation and Gender Identity Questions:
+A Qualitative Study and Transgender-inclusive measures of sex/gender for population surveys: Mixed-methods evaluation and recommendations
+
+Week 4: July 4
+Created a public Github repository for "gender as a concept in data science project" and uploaded all  Rmarkdown documents and codes along with the project diary.
+Organized the variables of interest from the Gates Millenium Survey separating gender/sex-related questions from the rest and uploaded the document to the Github repository.
+Sorted the variables of interest based on the order of importance.
+Created a new dataset with added columns of participation and transition to identify the participation behavior of the participants in the three surveys and to identify participants who have transitioned from male to female or female to male 
+Created different data sets consisting of participant IDs for individuals based on their participation in baseline, first follow-up, and second follow-up survey
+Identified possible venues for research poster presentation
+
+
