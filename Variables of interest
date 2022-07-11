@@ -1,0 +1,259 @@
+Variables of interest from Gates Millenium Scholars (GMS) 
+Survey Data Cohort 1, United States, 2000-2008
+
+1 SU_ID
+
+8.6 BI_5 R_GENDER FIXED R’s gender
+Are you:
+1 Male
+2 Female
+3 Refused
+
+0.4 SEX_DB FIXED Preload Sex/Gender
+1 Male
+2 Female
+3 Unknown
+
+2.8 GATES_7 GMSLEADR YESNO Participate in GMS leadership activities
+Did you participate in GMS leadership activities?
+1 YES
+2 NO
+3 Refused
+If GATES_7 = 1, go to GATES_8, else go to GATES_A1
+If GMSLEADR=1 go to GMSLDACT, else go to GMSATNCO
+
+2.9 GATES_8 GMSLDACT NUMBER Number of leadership activities
+How many GMS leadership activities did you participate in?
+
+5.31 CEX_19A5 FRNNCOLL FIXED Most friends are not in college
+Do you agree or disagree with the following statements: Most of my friends are not in college or a university?
+1 Strongly disagree
+2 Disagree
+3 Agree
+4 Strongly agree
+5 Refused
+
+4.13 ACE_9 GLEADER YESNO Campus leadership position
+During this school year, have you held a campus leadership position (e.g.
+student government, Resident Advisor, club officer, etc.)
+1 YES
+2 NO
+3 Don't know
+
+6.15 YA_4A12 SESATISF FIXED Satisfied with myself
+How much do you agree with each of the following statements? On the whole I am satisfied with myself.
+1 Strongly Agree
+2 Agree
+3 Disagree
+4 Disagree strongly
+5 Refused
+
+5.18 CEX_13A6 UDIFFFRN FIXED Fresh R. diff 1st yr make new friends
+When you first started college or a university, how difficult did you find each
+of the following? making new friends?
+1 Very difficult
+2 Difficult
+3 Not very difficult
+4 Not difficult
+5 Refused
+
+6.9 YA_4A6 LCGETAHD FIXED Others stop me from getting ahead
+How much do you agree with each of the following statements? Every time I try to get ahead, something or somebody stops me.
+1 Strongly Agree
+2 Agree
+3 Disagree
+4 Disagree strongly
+5 Refused
+
+6.7 YA_4A4 SEESTMWO FIXED Person of worth
+How much do you agree with each of the following statements? I feel I am a person of worth, the equal of other people.
+1 Strongly Agree
+2 Agree
+3 Disagree
+4 Disagree strongly
+5 Refused
+
+6.8 YA_4A5 SEDOWELL FIXED Do things as well as others
+How much do you agree with each of the following statements? I am able to do things as well as most other people.
+1 Strongly Agree
+2 Agree
+3 Disagree
+4 Disagree strongly
+5 Refused
+
+6.16 YA_4A13 SEUSELES FIXED Feel useless at times
+How much do you agree with each of the following statements? I feel useless at times.
+1 Strongly Agree
+2 Agree
+3 Disagree
+4 Disagree strongly
+5 Refused
+
+6.17 YA_4A14 SENOGOOD FIXED Feel no good at all
+How much do you agree with each of the following statements? At times, I think I am not good at all.
+1 Strongly Agree
+2 Agree
+3 Disagree
+4 Disagree strongly
+5 Refused
+
+6.18 YA_4A15 LCPLANSW FIXED Make plans work
+How much do you agree with each of the following statements? When I make plans, I am almost certain I can make them work.
+1 Strongly Agree
+2 Agree
+3 Disagree
+4 Disagree strongly
+5 Refused
+
+5.10 CEX_10A1 COMDEGRE FIXED R committed to earn degree curr college
+Please state your level or agreement or disagreement with each of the following
+statements: I am committed to earning a degree at my current college or university.
+1 Strongly disagree
+2 Disagree
+3 Agree
+4 Strongly agree
+5 Refused
+
+5.13 CEX_13A1 UDIFFSCW FIXED Fresh R. diff. 1st yr keep up w/
+schoolwork
+When you first started college or a university, how difficult did you find each
+of the following? keeping up with your schoolwork?
+1 Very difficult
+2 Difficult
+3 Not very difficult
+4 Not difficult
+5 Refused
+
+5.14 CEX_13A2 UDIFFTIM FIXED Fresh R. diff 1st yr managing time
+When you first started college or a university, how difficult did you find each
+of the following? managing your time effectively?
+1 Very difficult
+2 Difficult
+3 Not very difficult
+4 Not difficult
+5 Refused
+
+5.24 CEX_16A3 UNDSOSTU FIXED Support other students
+Since entering college or a university, to what extent have you turned to each
+of the following for support and encouragement? Other students?
+1 A lot
+2 Some
+3 A little
+4 Not at all
+5 Refused
+
+6.4 YA_4A1 SELFGOOD FIXED Feel good about myself
+How much do you agree with each of the following statements? I feel good about myself.
+1 Strongly Agree
+2 Agree
+3 Disagree
+4 Disagree strongly
+5 Refused
+
+5.18 CEX_13A6 UDIFFFRN FIXED Fresh R. diff 1st yr make new friends
+When you first started college or a university, how difficult did you find each
+of the following? making new friends?
+1 Very difficult
+2 Difficult
+3 Not very difficult
+4 Not difficult
+5 Refused
+
+5.22 CEX_16A1 UNDSFAC FIXED Support one or more faculty
+Since entering college or a university, to what extent have you turned to each
+of the following for support and encouragement? One or more faculty members
+1 A lot
+2 Some
+3 A little
+4 Not at all
+5 Refused
+IF PL_2 = 3,7, go to CEX_16A3
+If PL_2=3,7 go to UNDSOSTU
+
+5.24 CEX_16A3 UNDSOSTU FIXED Support other students
+Since entering college or a university, to what extent have you turned to each
+of the following for support and encouragement? Other students?
+1 A lot
+2 Some
+3 A little
+4 Not at all
+5 Refused
+
+6.5 YA_4A2 LCNECNTR FIXED Don't have enough control over life
+How much do you agree with each of the following statements? I don't have enough control over the direction my life is taking.
+1 Strongly Agree
+2 Agree
+3 Disagree
+4 Disagree strongly
+5 Refused
+
+6.6 YA_4A3 LCGOODLK FIXED Good luck important
+How much do you agree with each of the following statements? In my life, good luck is more important than hard work for success.
+1 Strongly Agree
+2 Agree
+3 Disagree
+4 Disagree strongly
+5 Refused
+
+6.9 YA_4A6 LCGETAHD FIXED Others stop me from getting ahead
+How much do you agree with each of the following statements? Every time I try to get ahead, something or somebody stops me.
+1 Strongly Agree
+2 Agree
+3 Disagree
+4 Disagree strongly
+5 Refused
+
+8.15 BI_13 HSMATHYR FIXED No of years of math R completed in HS
+How many years of mathematics coursework did you take in high school?
+0 None
+1 One
+2 Two
+3 Three
+4 Four or more
+5 Don't know
+8.16 BI_14 HSSCIEYR FIXED No of years of science R completed in HS
+How many years of science coursework did you take in high school?
+0 None
+1 One
+2 Two
+3 Three
+4 Four or more
+5 Don't know
+
+6) ACE10_ Leadership Loop
+Please state your level of agreement or disagreement with each of the following
+statements:
+It is natural for me to be the leader in a group setting. NATLEAD
+I feel comfortable being labeled the “leader” in a group setting LABLEAD
+I believe I am destined to be a leader DESTLEAD
+I do not relate to the most common definitions of “leadership” LEADDEF
+Others typically perceive me to be the leader in a group setting OTHLEAD
+1 Strongly disagree
+2 Disagree
+3 Agree
+4 Strongly agree
+5 Refused
+
+7) CEXL1_, CEXL2_, CEXL3_ Personal problems
+How often did you seek assistance from the following people when you had a personal
+problem?
+A) Family Members PPFAM
+B) Friends PPFRIEND
+C) Faculty PPFACUTY
+D) Clergy/Priest PPCLERGY
+E) Other: Please specify:_______ PPOTHR
+1 Very often
+2 Often
+3 Sometimes
+4 Seldom
+5 N/A
+
+5.19 CEX_13A7 UDIFFENV FIXED Fresh R. diff 1st yr comfort living envrn
+When you first started college or a university, how difficult did you find each
+of the following? 	Having a comfortable living environment?
+1 Very difficult
+2 Difficult
+3 Not very difficult
+4 Not difficult
+5 Refused
+
