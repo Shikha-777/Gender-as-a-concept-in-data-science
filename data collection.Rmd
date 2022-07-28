@@ -3,11 +3,15 @@ title: "gender"
 output: html_document
 date: '2022-07-10'
 ---
+
 ```{r}
 library(dplyr)
+library(ggplot2)
+library(ggmosaic)
 ```
 
-#1 Participation ID for participants who took part in all three surveys 
+#1 Participation ID for participants who took part in all three surveys
+
 ```{r}
 all_three=(da34375.0001) %>% filter(FU1_MARKER=="(1) Completed Wave",FU2_MARKER=="(1) Completed Wave", BL_MARKER=="(1) Completed Wave")%>% select(SU_ID)
 
@@ -16,13 +20,14 @@ all_three
 ```
 
 #2 Participation ID for participants who took part in baseline and first follow up survey
+
 ```{r}
 first_two=(da34375.0001) %>% filter(FU1_MARKER=="(1) Completed Wave", BL_MARKER=="(1) Completed Wave")%>% select(SU_ID)
 
 first_two
 ```
 
-#3 Participation ID for participants who took part in baseline and second follow up. 
+#3 Participation ID for participants who took part in baseline and second follow up.
 
 ```{r}
 first_last=(da34375.0001) %>% filter(FU2_MARKER=="(1) Completed Wave", BL_MARKER=="(1) Completed Wave")%>% mutate(participation=c("first and last"))%>%select(SU_ID,participation)
@@ -30,8 +35,8 @@ first_last=(da34375.0001) %>% filter(FU2_MARKER=="(1) Completed Wave", BL_MARKER
 first_last
 ```
 
-
 #4 Creating a newdata set consisting of all columns from the original dataset along with a new "participation" column which tracks if the participant participated in "all three","first and last", "first two" or NA.
+
 ```{r}
 df <- da34375.0001 %>% 
 mutate(participation = case_when(
@@ -50,6 +55,7 @@ df
 ```
 
 #5 Check to see code #4 works accurately
+
 ```{r}
 new<-df%>%select(participation,SU_ID,BL_MARKER,FU1_MARKER,FU2_MARKER)
 new
@@ -58,11 +64,14 @@ new
 #6 Filtering for "participation" column with"all three","first and last", "first two"
 
 ```{r}
-new_dataset<- df %>%filter(participation=="all three"|participation=="first and last"|participation=="first two")
+new_dataset<- df %>%filter(participation=="all three"|participation=="first and last"|participation=="first two")%>%select(SU_ID, SEX_DB,BL_R_GENDER,FU1_R_GENDER,FU2_R_GENDER)%>%filter(SEX_DB=="(1) Male" & BL_R_GENDER=="(2) Female")
+ 
 new_dataset
+
 ```
 
 #filtering m to f and f to m participants
+
 ```{r}
 new_df <- (da34375.0001) %>% 
 mutate(transition = case_when(
@@ -77,6 +86,553 @@ mutate(transition = case_when(
     (TRUE)~ "No"
 ))
 
-new_df%>%select(transition)
+#new_df%>%select(transition,SU_ID)
 #%>%filter(transition=="MtoF"|transition=="FtoM")
+new_df%>%select(transition)%>%filter(transition!="No")
+```
+
+```{r}
+new_dataset_1<- df %>%filter(participation=="all three"|participation=="first and last"|participation=="first two")%>%select(SEX_DB,SU_ID)%>%filter(SEX_DB!="(1) Male" & SEX_DB!="(2) Female")
+ 
+new_dataset_1
+
+```
+
+```{r}
+new_dataset_2<- df %>%filter(participation=="all three"|participation=="first and last"|participation=="first two")%>%select(SU_ID,SEX_DB)%>%filter(SEX_DB=="(1) Male")
+
+new_dataset_2
+```
+
+```{r}
+new_dataset_3<- df %>%filter(participation=="all three"|participation=="first and last"|participation=="first two")%>%select(SU_ID,SEX_DB)%>%filter(SEX_DB=="(2) Female")
+
+new_dataset_3
+```
+
+```{r}
+filtered_dataset<- df%>%filter(participation=="all three"|participation=="first and last"|participation=="first two")%>%select(SU_ID,SEX_DB,BL_R_GENDER,BL_GMSLEADR,BL_GMSLDACT,BL_FRNNCOLL,BL_GLEADER, BL_UDIFFFRN,BL_SESATISF,BL_LCGETAHD,BL_SEESTMWO,BL_SEDOWELL,BL_SEUSELES,BL_SENOGOOD,BL_LCPLANSW,BL_COMDEGRE,BL_UDIFFSCW,BL_UDIFFTIM,BL_UNDSOSTU, BL_SELFGOOD,BL_UDIFFFRN,BL_UNDSFAC,BL_UNDSOSTU,BL_LCNECNTR,BL_HSMATHYR,BL_HSSCIEYR,FU1_GMSLEADR,FU1_GLEADER,FU1_R_GENDER,FU1_APLYGRAD,FU1_GMSLDACT,FU1_UCULTURE,FU1_GLEADER,FU1_RGRPSSUP,FU1_POLPROG,FU1_DIFFSCHW,FU1_PPOTHR,FU1_DIFFSCHW,FU1_SOCDISCR,FU1_FACINAPP,FU1_SELFGOOD,FU1_LCNECNTR,FU1_SEESTMWO,FU1_SEDOWELL,FU1_LCGETAHD,FU1_AENOTWEL,FU1_AEMAKCOL,FU1_SESATISF,FU1_SEUSELES,FU1_SENPROUD,FU2_NOGRNOSC,FU2_GMSLDACT,FU2_HLTHINSR,FU2_SATCOWRK,FU2_OPPJOB,FU2_COMDIVRS,FU2_PNSADJUS,FU2_DESTLEAD,FU2_POSCULT,FU2_DIFFVIEW,FU2_BULDCOAL,FU2_VOTEELEC,FU2_PROMEQIT,FU2_R_GENDER,FU2_GMSLEADR)
+#%>%filter(SEX_DB=="(2) Female")
+
+filtered_dataset
+```
+
+# Not all male or female. Missing values.
+
+```{r}
+new_dataset_7<- df %>%filter(participation=="all three"|participation=="first and last"|participation=="first two")%>%select(SEX_DB,SU_ID,BL_R_GENDER,FU1_R_GENDER,FU2_R_GENDER)%>%filter((SEX_DB=="(1) Male"&BL_R_GENDER=="(1) Male"&FU1_R_GENDER=="(1) Male"&FU2_R_GENDER=="(1) Male")|(SEX_DB=="(2) Female"&BL_R_GENDER=="(2) Female"&FU1_R_GENDER=="(2) Female"&FU2_R_GENDER=="(2) Female"))
+ 
+new_dataset_7
+
+```
+
+```{r}
+l<-df %>%filter(participation=="all three"|participation=="first and last"|participation=="first two")%>%select(SEX_DB,SU_ID,BL_R_GENDER,FU1_R_GENDER,FU2_R_GENDER)
+
+new_df<-anti_join(l,new_dataset_7,by="SU_ID")
+new_df
+
+```
+
+#Visualizaton
+
+```{r}
+new_df <- df %>% 
+mutate(unknown_sex = case_when(
+  
+  ((SEX_DB!="(1) Male") & (SEX_DB!="(2) Female"))~ "YES",
+   
+   TRUE~"NO"))
+
+new_df
+
+```
+
+```{r}
+missing<- new_df %>%filter(participation=="all three"|participation=="first and last"|participation=="first two")%>%select(SU_ID,SEX_DB,BL_GMSLEADR,BL_GMSLDACT,BL_FRNNCOLL,BL_GLEADER,BL_UDIFFFRN,BL_SESATISF,BL_LCGETAHD,BL_SEESTMWO,BL_SEDOWELL,BL_SEUSELES,unknown_sex,BL_SENOGOOD,BL_LCPLANSW,BL_COMDEGRE,BL_UDIFFSCW,BL_UDIFFTIM,BL_UNDSOSTU, BL_SELFGOOD)
+
+missing
+```
+
+```{r}
+ggplot(data = missing) +
+  geom_mosaic(aes(x=product(BL_SESATISF), fill = BL_SESATISF, 
+                  conds = product(unknown_sex))) +
+  labs(title='(unknown sex |On the whole I am
+  satisfied with myself.)')
+
+```
+
+```{r}
+ggplot(data = missing) +
+  geom_mosaic(aes(x=product(BL_SESATISF), fill = BL_SESATISF, 
+                  conds = product(SEX_DB))) +
+  labs(title='(Sex at birth | On the whole I am 
+  satisfied with myself.)')
+
+```
+
+```{r}
+ggplot(data = missing) +
+  geom_mosaic(aes(x=product(BL_GLEADER), fill = BL_GLEADER, 
+                  conds = product(unknown_sex))) +
+  labs(title='(unknown sex | During this school year,
+       have you held a campus leadership position?)')
+
+```
+
+```{r}
+ggplot(data = missing) +
+  geom_mosaic(aes(x=product(BL_GLEADER), fill = BL_GLEADER, 
+                  conds = product(SEX_DB))) +
+  labs(title='(Sex at birth | During this school year, 
+       have you held a campus leadership position?)')
+
+```
+
+```{r}
+ggplot(data = missing) +
+  geom_mosaic(aes(x=product(BL_UDIFFFRN), fill = BL_UDIFFFRN, 
+                  conds = product(unknown_sex))) +
+  labs(title='(unknown sex | How difficult did
+       you find making friends?)')
+
+```
+
+```{r}
+ggplot(data = missing) +
+  geom_mosaic(aes(x=product(BL_UDIFFFRN), fill = BL_UDIFFFRN, 
+                  conds = product(SEX_DB))) +
+  labs(title='(Sex at birth | How difficult did
+       you find making friends?)')
+
+```
+
+```{r}
+ggplot(data = missing) +
+  geom_mosaic(aes(x=product(BL_FRNNCOLL), fill = BL_FRNNCOLL, 
+                  conds = product(unknown_sex))) +
+  labs(title='(unknown sex | Most of my 
+       friends are not in college?)')
+
+```
+
+```{r}
+ggplot(data = missing) +
+  geom_mosaic(aes(x=product(BL_FRNNCOLL), fill = BL_FRNNCOLL, 
+                  conds = product(SEX_DB))) +
+  labs(title='(Sex at birth | Most of my 
+  friends are not in college)')
+
+```
+
+```{r}
+ggplot(data = missing) +
+  geom_mosaic(aes(x=product(BL_LCGETAHD), fill = BL_LCGETAHD, 
+                  conds = product(unknown_sex))) +
+  labs(title='(unknown sex | Every time I try
+       to get ahead, something or
+       somebody stops me.)')
+
+```
+
+```{r}
+ggplot(data = missing) +
+  geom_mosaic(aes(x=product(BL_LCGETAHD), fill = BL_LCGETAHD, 
+                  conds = product(SEX_DB))) +
+  labs(title='(Sex at birth | Every time I try 
+       to get ahead, something or 
+       somebody stops me.)')
+
+```
+
+```{r}
+ggplot(data = missing) +
+  geom_mosaic(aes(x=product(BL_SEESTMWO), fill = BL_SEESTMWO, 
+                  conds = product(unknown_sex))) +labs(title='(Unknown Sex | I feel I am
+  a person of worth, the equal of other people.)')
+
+```
+
+```{r}
+ggplot(data = missing) +
+  geom_mosaic(aes(x=product(BL_SEESTMWO), fill = BL_SEESTMWO, 
+                  conds = product(SEX_DB))) +
+  labs(title='(Sex at birth | I feel I am a person of worth,
+  the equal of other people.)')
+
+```
+
+```{r}
+ggplot(data = missing) +
+  geom_mosaic(aes(x=product(BL_SEDOWELL), fill = BL_SEDOWELL, 
+                  conds = product(unknown_sex))) +
+  labs(title='f(unknown sex |I am able to do
+  things as well as most other people.)')
+
+```
+
+```{r}
+ggplot(data = missing) +
+  geom_mosaic(aes(x=product(BL_SEDOWELL), fill = BL_SEDOWELL, 
+                  conds = product(SEX_DB))) +
+  labs(title='(Sex at birth |I am able to do 
+  things as well as most other people.)')
+
+```
+
+```{r}
+ggplot(data = missing,aes(x=unknown_sex,y=BL_GMSLDACT))+geom_point()
+
+```
+
+```{r}
+ggplot(data = missing,aes(x=SEX_DB,y=BL_GMSLDACT))+geom_point()
+
+```
+
+<https://www.cedars-sinai.org/newsroom/most-gender-dysphoria-established-by-age-7-study-finds/#>:\~:text=All%20of%20the%20participants%20were,gender%20dysphoria%20by%20age%207.
+
+https://www.scottishtrans.org/wp-content/uploads/2013/03/trans_mh_study.pdf
+
+https://bmcpublichealth.biomedcentral.com/articles/10.1186/s12889-020-8228-5
+
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6234844/
+
+https://www.sciencedirect.com/science/article/pii/S0277953621004755
+
+
+most likely: second follow up is missing, sex_db, se least likely: if either the first follow up or baseline is missing with sex_db intact and shows consistent pattern might: sex_db-b, baseline-b, 1st follow-c, 2nd follow-a, sex_db & baseline-a, sex_db & 1st_follow=c, sex_db & 2nd_follow-a,baseline & 2nd follow-a, baseline & 1st follow, 1st follow & 2nd follow, sex_db & baseline & 1st follow-c,baseline & 1st follow & 2nd follow-a, sex_db & 1st follow & 2nd follow-c,sex -db & 2nd follow & baseline-c.
+
+```{r}
+new_df1 <- (filtered_dataset) %>% 
+mutate(weights = case_when(
+  
+  ((SEX_DB=="(3) Unknown") & (is.na(BL_R_GENDER)
+) & (FU1_R_GENDER=="(2) Female")& (FU2_R_GENDER=="(2) Female")) ~ "Most",
+
+((SEX_DB=="(3) Unknown") & (is.na(BL_R_GENDER)) & (FU1_R_GENDER=="(1) Male")& (FU2_R_GENDER=="(1) Male")) ~ "Most",
+
+   ((SEX_DB=="(3) Unknown") & (is.na(FU1_R_GENDER)) &(BL_R_GENDER=="(1) Male")&(FU2_R_GENDER=="(1) Male")) ~ "Least",
+
+ ((SEX_DB=="(3) Unknown") & (is.na(FU1_R_GENDER)) &(BL_R_GENDER=="(2)Female")&(FU2_R_GENDER=="(2) Female")) ~ "Least",
+
+((SEX_DB=="(3) Unknown") & (is.na(FU2_R_GENDER))& (FU1_R_GENDER=="(1)Male")&(BL_R_GENDER=="(1)Male")) ~ "Most",
+
+((SEX_DB=="(3) Unknown") & (is.na(FU2_R_GENDER))& (FU1_R_GENDER=="(2)Female")&(BL_R_GENDER=="(2)Female")) ~ "Most",
+
+
+((is.na(BL_R_GENDER)) & (is.na(FU2_R_GENDER)) & (SEX_DB=="(1) Male")& (FU1_R_GENDER=="(1)Male")) ~ "Most",
+
+((is.na(BL_R_GENDER)) & (is.na(FU2_R_GENDER)) & (SEX_DB=="(2) Female")& (FU1_R_GENDER=="(2)Female")) ~ "Most",
+
+((is.na(BL_R_GENDER)) & (is.na(FU1_R_GENDER))&(SEX_DB=="(1) Male")&(FU2_R_GENDER=="(1) Male")) ~ "Least",
+
+((is.na(BL_R_GENDER)) & (is.na(FU1_R_GENDER))&(SEX_DB=="(2)Female")&(FU2_R_GENDER=="(2) Female")) ~ "Least",
+ 
+ 
+((is.na(FU2_R_GENDER)) & (is.na(FU1_R_GENDER))&(SEX_DB=="(2) Female")&(BL_R_GENDER=="(2) Female")) ~ "Most",
+
+((is.na(FU2_R_GENDER)) & (is.na(FU1_R_GENDER))&(SEX_DB=="(1) Male")&(BL_R_GENDER=="(1) Male")) ~ "Most",
+ 
+ 
+((is.na(FU2_R_GENDER)) & (is.na(FU1_R_GENDER)) & (SEX_DB=="(3) Unknown")&(BL_R_GENDER=="(1) Male")) ~ "Most",
+
+((is.na(FU2_R_GENDER)) & (is.na(FU1_R_GENDER)) & (SEX_DB=="(3) Unknown")&(BL_R_GENDER=="(2) Female")) ~ "Most",
+
+((is.na(BL_R_GENDER)) & (is.na(FU1_R_GENDER)) & (SEX_DB=="(3) Unknown")&(FU2_R_GENDER=="(2) Female")) ~ "Most",
+
+((is.na(BL_R_GENDER)) & (is.na(FU1_R_GENDER)) & (SEX_DB=="(3) Unknown")&(FU2_R_GENDER=="(1) Male")) ~ "Most",
+
+ 
+ ((is.na(BL_R_GENDER)) & (is.na(FU1_R_GENDER)) & (is.na(FU2_R_GENDER))&(SEX_DB=="(1) Male")) ~ "Most",
+
+
+ ((is.na(BL_R_GENDER)) & (is.na(FU1_R_GENDER)) & (is.na(FU2_R_GENDER))&(SEX_DB=="(2) Female")) ~ "Most",
+ 
+((is.na(FU2_R_GENDER)) & (is.na(BL_R_GENDER)) & (SEX_DB=="(3) Unknown")& (FU1_R_GENDER=="(1)Male")) ~ "Most",
+
+((is.na(FU2_R_GENDER)) & (is.na(BL_R_GENDER)) & (SEX_DB=="(3) Unknown")& (FU1_R_GENDER=="(2)Female")) ~ "Most",
+
+((FU2_R_GENDER=="(1) Male") & (BL_R_GENDER
+=="(1) Male") & (SEX_DB=="(3) Unknown")& (FU1_R_GENDER=="(1)Male")) ~ "More",
+
+((FU2_R_GENDER=="(2) Female") & (BL_R_GENDER
+=="(2) Female") & (SEX_DB=="(3) Unknown")& (FU1_R_GENDER=="(2) Female")) ~ "More",
+
+((FU2_R_GENDER=="(2) Female") & (is.na(BL_R_GENDER)) & (SEX_DB=="(2) Female")& (FU1_R_GENDER=="(2) Female")) ~ "Least",
+
+((FU2_R_GENDER=="(1) Male") & (is.na(BL_R_GENDER)) & (SEX_DB=="(1) Male")& (FU1_R_GENDER=="(1) Male")) ~ "Least",
+
+((FU2_R_GENDER=="(1) Male") & (BL_R_GENDER=="(1) Male")  & (SEX_DB=="(1) Male")& (is.na(FU1_R_GENDER))) ~ "Least",
+
+((FU2_R_GENDER=="(2) Female") & (BL_R_GENDER
+=="(2) Female")  & (SEX_DB=="(2) Female")& (is.na(FU1_R_GENDER))) ~ "Least",
+
+((is.na(FU2_R_GENDER)) & (BL_R_GENDER
+=="(1) Male")  & (SEX_DB=="(1) Male")& (FU1_R_GENDER=="(1) Male")) ~ "Most",
+
+(is.na(FU2_R_GENDER) & (BL_R_GENDER
+=="(2) Female")  & (SEX_DB=="(2) Female")& (FU1_R_GENDER=="(2) Female")) ~ "Most",
+
+#(SEX_DB=="(3) Unknown") ~ "More",
+
+#(BL_R_GENDER==NA)~ "Least",
+
+#(FU1_R_GENDER==NA)~ "Least",
+
+#(FU2_R_GENDER==NA)~ "Most",
+
+   
+    (TRUE)~ "No"
+))
+
+new_df1%>%select(weights,SEX_DB,FU1_R_GENDER,BL_R_GENDER,FU2_R_GENDER)
+
+```
+
+```{r}
+
+new_df2 <- (new_df1) %>% 
+mutate(Transition = case_when(
+  
+  ((SEX_DB=="(1) Male") & ((BL_R_GENDER
+!=NA)|(BL_R_GENDER!="(1) Male"))) ~ "Yes",
+
+((SEX_DB=="(2) Female") & ((BL_R_GENDER
+!=NA)|(BL_R_GENDER!="(2) Female"))) ~ "Yes",
+
+((SEX_DB=="(2) Female") & ((FU1_R_GENDER
+!=NA)|(FU1_R_GENDER!="(2) Female"))) ~ "Yes",
+
+ ((SEX_DB=="(1) Male") & ((FU1_R_GENDER
+!=NA)|(FU1_R_GENDER!="(1) Male"))) ~ "Yes",
+
+((SEX_DB=="(1) Male") & ((FU2_R_GENDER
+!=NA)|(FU2_R_GENDER!="(1) Male"))) ~ "Yes",
+
+((SEX_DB=="(2) Female") & ((FU2_R_GENDER
+!=NA)|(FU2_R_GENDER!="(2) Female"))) ~ "Yes",
+
+((BL_R_GENDER=="(1) Male") & ((FU1_R_GENDER
+!=NA)|(FU1_R_GENDER!="(1) Male"))) ~ "Yes",
+
+((BL_R_GENDER=="(2) Female") & ((FU1_R_GENDER
+!=NA)|(FU1_R_GENDER!="(2) Female"))) ~ "Yes",
+
+((BL_R_GENDER=="(1) Male") & ((FU2_R_GENDER
+!=NA)|(FU2_R_GENDER!="(1) Male"))) ~ "Yes",
+
+((BL_R_GENDER=="(2) Female") & ((FU2_R_GENDER
+!=NA)|(FU2_R_GENDER!="(2) Female"))) ~ "Yes",
+
+((FU1_R_GENDER=="(1) Male") & ((FU2_R_GENDER
+!=NA)|(FU2_R_GENDER!="(1) Male"))) ~ "Yes",
+
+((FU1_R_GENDER=="(2) Female") & ((FU2_R_GENDER
+!=NA)|(FU2_R_GENDER!="(2) Female"))) ~ "Yes",
+
+(TRUE)~ "No"
+))
+
+new_df2%>%select(Transition)%>%filter(Transition=="No")
+
+```
+
+```{r}
+ggplot(data = new_df1) +
+  geom_mosaic(aes(x=product(FU1_SEESTMWO), fill = FU1_SEESTMWO, 
+                  conds = product(weights))) +
+   theme(axis.text.x=element_text(angle=-25, hjust= .1))+theme(axis.text.y=element_text(angle=5, hjust= .1))+
+  labs(title='(weights | I feel I am
+  a person of worth,
+  the equal of other people.)')
+
+```
+
+```{r}
+ggplot(data = new_df1) +
+  geom_mosaic(aes(x=product(BL_SEESTMWO), fill = BL_SEESTMWO, 
+                  conds = product(weights))) +
+   theme(axis.text.x=element_text(angle=-25, hjust= .1))+theme(axis.text.y=element_text(angle=5, hjust= .1))+
+  labs(title='(weights| I feel I 
+       am a person of worth,the equal 
+       of other people.)')
+
+```
+
+```{r}
+ggplot(data = new_df1) +
+  geom_mosaic(aes(x=product(FU1_LCGETAHD), fill = FU1_LCGETAHD, 
+                  conds = product(weights))) +
+   theme(axis.text.x=element_text(angle=-25, hjust= .1))+theme(axis.text.y=element_text(angle=5, hjust= .1))+
+  labs(title='(weights| Every time I try 
+       to get ahead, something or 
+       somebody stops me.)')
+
+```
+
+```{r}
+ggplot(data = new_df1) +
+  geom_mosaic(aes(x=product(BL_LCGETAHD), fill = BL_LCGETAHD, 
+                  conds = product(weights))) +
+   theme(axis.text.x=element_text(angle=-25, hjust= .1))+theme(axis.text.y=element_text(angle=5, hjust= .1))+
+  
+  labs(title='(weights| Every time I try 
+       to get ahead, something or 
+       somebody stops me.)')
+
+```
+
+```{r}
+ggplot(data = new_df1) +
+  geom_mosaic(aes(x=product(FU1_SESATISF), fill = FU1_SESATISF, 
+                  conds = product(weights))) +
+   theme(axis.text.x=element_text(angle=-25, hjust= .1))+theme(axis.text.y=element_text(angle=5, hjust= .1))+
+  labs(title='(weights|On the whole I am
+  satisfied with myself.)')
+
+```
+
+```{r}
+ggplot(data = new_df1) +
+  geom_mosaic(aes(x=product(BL_SESATISF), fill = BL_SESATISF, 
+                  conds = product(weights))) +
+   theme(axis.text.x=element_text(angle=-25, hjust= .1))+theme(axis.text.y=element_text(angle=5, hjust= .1))+
+  labs(title='(weights|On the whole I am
+  satisfied with myself.)')
+
+```
+
+```{r}
+ggplot(data = new_df1) +
+  geom_mosaic(aes(x=product(FU1_GLEADER), fill = FU1_GLEADER, 
+                  conds = product(weights))) +
+   theme(axis.text.x=element_text(angle=-25, hjust= .1))+theme(axis.text.y=element_text(angle=5, hjust= .1))+
+  labs(title='(weights| During this school 
+  year,have you held a campus 
+  leadership position?)')
+
+```
+
+```{r}
+ggplot(data = new_df1) +
+  geom_mosaic(aes(x=product(BL_GLEADER), fill = BL_GLEADER, 
+                  conds = product(weights))) +
+   theme(axis.text.x=element_text(angle=-25, hjust= .1))+theme(axis.text.y=element_text(angle=5, hjust= .1))+
+  labs(title='(weights| During this school
+            year,have you held a campus 
+              leadership position?)')
+
+```
+
+```{r}
+ggplot(data = new_df1) +
+  geom_mosaic(aes(x=product(BL_UDIFFFRN), fill = BL_UDIFFFRN, 
+                  conds = product(weights))) +
+   theme(axis.text.x=element_text(angle=-25, hjust= .1))+theme(axis.text.y=element_text(angle=5, hjust= .1))+
+  labs(title='(weights| How difficult did
+       you find making friends?)')
+
+```
+
+```{r}
+ggplot(data = new_df1) +
+  geom_mosaic(aes(x=product(FU1_LCGETAHD), fill = FU1_LCGETAHD, 
+                  conds = product(weights))) +
+   theme(axis.text.x=element_text(angle=-25, hjust= .1))+theme(axis.text.y=element_text(angle=5, hjust= .1))+
+  labs(title='(weights| Every time I try
+       to get ahead, something or
+       somebody stops me.)')
+
+```
+
+```{r}
+ggplot(data = new_df1) +
+  geom_mosaic(aes(x=product(BL_LCGETAHD), fill = BL_LCGETAHD, 
+                  conds = product(weights))) +
+   theme(axis.text.x=element_text(angle=-25, hjust= .1))+theme(axis.text.y=element_text(angle=5, hjust= .1))+
+  labs(title='(weights| Every time I try
+       to get ahead, something or
+       somebody stops me.)')
+
+```
+
+```{r}
+ggplot(data = new_df1) +
+  geom_mosaic(aes(x=product(BL_FRNNCOLL), fill = BL_FRNNCOLL, 
+                  conds = product(weights))) +
+   theme(axis.text.x=element_text(angle=-25, hjust= .1))+theme(axis.text.y=element_text(angle=5, hjust= .1))+
+  labs(title='(weights| Most of my 
+       friends are not in college?)')
+
+```
+
+```{r}
+ggplot(data = new_df1) +
+  geom_mosaic(aes(x=product(FU1_SEDOWELL), fill = FU1_SEDOWELL, check_overlap = TRUE,
+                  conds = product(weights))) +
+   theme(axis.text.x=element_text(angle=-25, hjust= .1))+theme(axis.text.y=element_text(angle=5, hjust= .1))+
+  labs(title='(weights|I am able to do
+  things as well as most other
+  people.)')
+
+
+```
+
+```{r}
+ggplot(data = new_df1) +
+  geom_mosaic(aes(x=product(BL_SEDOWELL), fill = BL_SEDOWELL, 
+                  conds = product(weights))) +
+   theme(axis.text.x=element_text(angle=-25, hjust= .1))+theme(axis.text.y=element_text(angle=5, hjust= .1))+
+  ggtitle('(weights|I am able to do
+  things as well as most other 
+  people.)')
+
+```
+
+```{r}
+ggplot(data = new_df1) +
+  geom_mosaic(aes(x=product(BL_SENOGOOD), fill = BL_SENOGOOD, 
+                  conds = product(weights))) +
+   theme(axis.text.x=element_text(angle=-25, hjust= .1))+theme(axis.text.y=element_text(angle=5, hjust= .1))+
+  labs(title='(weights|At times, I think
+              I am not good at all)')
+```
+
+```{r}
+ggplot(data = new_df1) +
+  geom_mosaic(aes(x=product(BL_LCPLANSW), fill = BL_LCPLANSW, 
+                  conds = product(weights))) +
+   theme(axis.text.x=element_text(angle=-25, hjust= .1))+theme(axis.text.y=element_text(angle=5, hjust= .1))+
+  labs(title='(weights|When I make plans,
+               I am almost certain I can
+               make them work.
+)')
+
+```
+
+```{r}
+ggplot(data = new_df1) +
+  geom_mosaic(aes(x=product(BL_COMDEGRE), fill = BL_COMDEGRE, 
+                  conds = product(weights))) +
+   theme(axis.text.x=element_text(angle=-25, hjust= .1))+theme(axis.text.y=element_text(angle=5, hjust= .1))+
+  labs(title='(weights| I am committed 
+            to earning a degree at 
+       my current college or university.
+)')
+
+```
+
+```{r}
+ggplot(data = new_df1) +
+  geom_mosaic(aes(x=product(BL_UNDSOSTU), fill = BL_UNDSOSTU, 
+                  conds = product(weights))) +
+   theme(axis.text.x=element_text(angle=-25, hjust= .1))+theme(axis.text.y=element_text(angle=0, hjust= .1))+
+  labs(title='f(unknown sex |Since entering 
+            college or a university, to 
+        what extent have you turned to other 
+       students for support and encouragement? 
+)')
+
 ```
