@@ -91,6 +91,7 @@ mutate(transition = case_when(
 new_df%>%select(transition)%>%filter(transition!="No")
 ```
 
+#Looking for missing data
 ```{r}
 new_dataset_1<- df %>%filter(participation=="all three"|participation=="first and last"|participation=="first two")%>%select(SEX_DB,SU_ID)%>%filter(SEX_DB!="(1) Male" & SEX_DB!="(2) Female")
  
@@ -109,6 +110,9 @@ new_dataset_3<- df %>%filter(participation=="all three"|participation=="first an
 
 new_dataset_3
 ```
+ 
+ 
+#Selecting columns based on variables of interest
 
 ```{r}
 filtered_dataset<- df%>%filter(participation=="all three"|participation=="first and last"|participation=="first two")%>%select(SU_ID,SEX_DB,BL_R_GENDER,BL_GMSLEADR,BL_GMSLDACT,BL_FRNNCOLL,BL_GLEADER, BL_UDIFFFRN,BL_SESATISF,BL_LCGETAHD,BL_SEESTMWO,BL_SEDOWELL,BL_SEUSELES,BL_SENOGOOD,BL_LCPLANSW,BL_COMDEGRE,BL_UDIFFSCW,BL_UDIFFTIM,BL_UNDSOSTU, BL_SELFGOOD,BL_UDIFFFRN,BL_UNDSFAC,BL_UNDSOSTU,BL_LCNECNTR,BL_HSMATHYR,BL_HSSCIEYR,FU1_GMSLEADR,FU1_GLEADER,FU1_R_GENDER,FU1_APLYGRAD,FU1_GMSLDACT,FU1_UCULTURE,FU1_GLEADER,FU1_RGRPSSUP,FU1_POLPROG,FU1_DIFFSCHW,FU1_PPOTHR,FU1_DIFFSCHW,FU1_SOCDISCR,FU1_FACINAPP,FU1_SELFGOOD,FU1_LCNECNTR,FU1_SEESTMWO,FU1_SEDOWELL,FU1_LCGETAHD,FU1_AENOTWEL,FU1_AEMAKCOL,FU1_SESATISF,FU1_SEUSELES,FU1_SENPROUD,FU2_NOGRNOSC,FU2_GMSLDACT,FU2_HLTHINSR,FU2_SATCOWRK,FU2_OPPJOB,FU2_COMDIVRS,FU2_PNSADJUS,FU2_DESTLEAD,FU2_POSCULT,FU2_DIFFVIEW,FU2_BULDCOAL,FU2_VOTEELEC,FU2_PROMEQIT,FU2_R_GENDER,FU2_GMSLEADR)
@@ -126,6 +130,7 @@ new_dataset_7
 
 ```
 
+#Identifying participants with atleast one of sex nad gender variable missing
 ```{r}
 l<-df %>%filter(participation=="all three"|participation=="first and last"|participation=="first two")%>%select(SEX_DB,SU_ID,BL_R_GENDER,FU1_R_GENDER,FU2_R_GENDER)
 
@@ -134,7 +139,7 @@ new_df
 
 ```
 
-#Visualizaton
+#Identifying participants with atleast one of sex nad gender variable missing
 
 ```{r}
 new_df <- df %>% 
@@ -148,12 +153,14 @@ new_df
 
 ```
 
+#Selecting variables of interest
 ```{r}
 missing<- new_df %>%filter(participation=="all three"|participation=="first and last"|participation=="first two")%>%select(SU_ID,SEX_DB,BL_GMSLEADR,BL_GMSLDACT,BL_FRNNCOLL,BL_GLEADER,BL_UDIFFFRN,BL_SESATISF,BL_LCGETAHD,BL_SEESTMWO,BL_SEDOWELL,BL_SEUSELES,unknown_sex,BL_SENOGOOD,BL_LCPLANSW,BL_COMDEGRE,BL_UDIFFSCW,BL_UDIFFTIM,BL_UNDSOSTU, BL_SELFGOOD)
 
 missing
 ```
 
+#Data visualization based on likelihood of missing SEX_DB variable representing transgender people
 ```{r}
 ggplot(data = missing) +
   geom_mosaic(aes(x=product(BL_SESATISF), fill = BL_SESATISF, 
@@ -281,6 +288,7 @@ ggplot(data = missing) +
 
 ```
 
+#Data visualization based on likelihood of missing SEX_DB variable representing transgender people
 ```{r}
 ggplot(data = missing,aes(x=unknown_sex,y=BL_GMSLDACT))+geom_point()
 
@@ -291,18 +299,7 @@ ggplot(data = missing,aes(x=SEX_DB,y=BL_GMSLDACT))+geom_point()
 
 ```
 
-<https://www.cedars-sinai.org/newsroom/most-gender-dysphoria-established-by-age-7-study-finds/#>:\~:text=All%20of%20the%20participants%20were,gender%20dysphoria%20by%20age%207.
-
-https://www.scottishtrans.org/wp-content/uploads/2013/03/trans_mh_study.pdf
-
-https://bmcpublichealth.biomedcentral.com/articles/10.1186/s12889-020-8228-5
-
-https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6234844/
-
-https://www.sciencedirect.com/science/article/pii/S0277953621004755
-
-
-most likely: second follow up is missing, sex_db, se least likely: if either the first follow up or baseline is missing with sex_db intact and shows consistent pattern might: sex_db-b, baseline-b, 1st follow-c, 2nd follow-a, sex_db & baseline-a, sex_db & 1st_follow=c, sex_db & 2nd_follow-a,baseline & 2nd follow-a, baseline & 1st follow, 1st follow & 2nd follow, sex_db & baseline & 1st follow-c,baseline & 1st follow & 2nd follow-a, sex_db & 1st follow & 2nd follow-c,sex -db & 2nd follow & baseline-c.
+# Assigning likelihood of participants based on missing sex and gender variable in initial, baseline, first follow up, and second follow up study 
 
 ```{r}
 new_df1 <- (filtered_dataset) %>% 
@@ -355,10 +352,10 @@ mutate(weights = case_when(
 ((is.na(FU2_R_GENDER)) & (is.na(BL_R_GENDER)) & (SEX_DB=="(3) Unknown")& (FU1_R_GENDER=="(2)Female")) ~ "Most",
 
 ((FU2_R_GENDER=="(1) Male") & (BL_R_GENDER
-=="(1) Male") & (SEX_DB=="(3) Unknown")& (FU1_R_GENDER=="(1)Male")) ~ "More",
+=="(1) Male") & (SEX_DB=="(3) Unknown")& (FU1_R_GENDER=="(1)Male")) ~ "Most",
 
 ((FU2_R_GENDER=="(2) Female") & (BL_R_GENDER
-=="(2) Female") & (SEX_DB=="(3) Unknown")& (FU1_R_GENDER=="(2) Female")) ~ "More",
+=="(2) Female") & (SEX_DB=="(3) Unknown")& (FU1_R_GENDER=="(2) Female")) ~ "Most",
 
 ((FU2_R_GENDER=="(2) Female") & (is.na(BL_R_GENDER)) & (SEX_DB=="(2) Female")& (FU1_R_GENDER=="(2) Female")) ~ "Least",
 
@@ -377,11 +374,6 @@ mutate(weights = case_when(
 
 #(SEX_DB=="(3) Unknown") ~ "More",
 
-#(BL_R_GENDER==NA)~ "Least",
-
-#(FU1_R_GENDER==NA)~ "Least",
-
-#(FU2_R_GENDER==NA)~ "Most",
 
    
     (TRUE)~ "No"
@@ -391,6 +383,7 @@ new_df1%>%select(weights,SEX_DB,FU1_R_GENDER,BL_R_GENDER,FU2_R_GENDER)
 
 ```
 
+# Identifying participants who have transitioned from male to female or female to male
 ```{r}
 
 new_df2 <- (new_df1) %>% 
@@ -439,6 +432,7 @@ new_df2%>%select(Transition)%>%filter(Transition=="No")
 
 ```
 
+# Data visualization based on likelihood of missing data representing transgender people
 ```{r}
 ggplot(data = new_df1) +
   geom_mosaic(aes(x=product(FU1_SEESTMWO), fill = FU1_SEESTMWO, 
