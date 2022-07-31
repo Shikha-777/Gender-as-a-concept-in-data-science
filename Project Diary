@@ -1,21 +1,34 @@
-Week 2: June 20
+Week 1: Jun 6, 2022
 
+Watched The danger of a single story and wrote a 250-word essay based on the following instructions from The Lang Center at Swarthmore:
+
+Using the notes from the videos and your conversation, write a 250 word response to the question: how has this activity enlightened your understanding of perspective-taking and how will you use this to enhance your summer experience? Upload your response to Moodle.
+Created a github account and went through the following tutorial
+Read Sex Categorization in Medical Contexts: A Cautionary Tale and Towards statistical best practices for gender and sex data
+Brainstormed possible research questions of interest
+Submitted QSIDE Data4Justice Accelerator application
+Uploaded application materials on shared google drive
+
+
+Week 2: Jun 20, 2022
        
  Examined open-source gender-related data and identified possible data sources from studies that measured both gender identity and sex at birth.
- Read doing gender by Candace West and Don H Zimmerman and gained  an understanding of the dynamics of social circumstances which dictate how people actively create gender differences
-Read the book Data for the People and gained an understanding of social data, the fragility of data privacy, and the need for data transparency and agency in the modern world.
+ Read Doing Gender by Candace West and Don H Zimmerman and gained  an understanding of the dynamics of social circumstances which dictate how people actively create gender differences
+Read the book Data for People and gained an understanding of social data, the fragility of data privacy, and the need for data transparency and agency in the modern world.
 
 
- Week 3:  June 27
+ Week 3:  Jun 27, 2022
 
 Identified variable of interest from Gates Millennium Survey
 Loaded the data from the Gates Millennium Survey in R and filtered the data to identify participants who participated in baseline, first, and second follow-up surveys.
 Reflected on the ideas of gender identity and how it relates to data identity.
 Read the research papers- What Sexual and Gender Minority People Want Researchers
-to Know About Sexual Orientation and Gender Identity Questions:
-A Qualitative Study and Transgender-inclusive measures of sex/gender for population surveys: Mixed-methods evaluation and recommendations
+ and Transgender-inclusive measures of sex/gender for population surveys: Mixed-methods evaluation and recommendations
+Watched How to Survive a Plague and wrote a 250-word essay based on the following instructions from The Lang Center at Swarthmore:
+Write a 250-word response to the question: In light of your own sense of civic identity, how might you address social systems, structures, or inequalities in your work this summer (internship, project, or faculty-led engaged research) and/or in your personal life?
 
-Week 4: July 4
+
+Week 4: Jul 4, 2022
 Created a public Github repository for "gender as a concept in data science project" and uploaded all  Rmarkdown documents and codes along with the project diary.
 Organized the variables of interest from the Gates Millenium Survey separating gender/sex-related questions from the rest and uploaded the document to the Github repository.
 Sorted the variables of interest based on the order of importance.
@@ -23,4 +36,28 @@ Created a new dataset with added columns of participation and transition to iden
 Created different data sets consisting of participant IDs for individuals based on their participation in baseline, first follow-up, and second follow-up survey
 Identified possible venues for research poster presentation
 
+Week 5: Jul 11, 2022
+Filtered the data set to identify participant IDs for individuals with missing data in either baseline, first follow-up, and second follow-up survey
+Created mosaic plot for six variables of interest to compare individuals whose sex at birth was missing against male and female-identified individuals
+Attended QSIDE data scraping tutorial 
+Compiled details on possible research conferences.
+ Read Stéphanie Gaudet’s How the Ethical Experience Defines Adulthood: A Sociological Analysis  and wrote a 250-word essay based on the following instructions from The Lang Center at Swarthmore: Choose a concept presented in the article (e.g., emerging adulthood, ontological security, ethics, responsibility, reflexivity) and critically reflect upon it by providing examples from your own experiences, the conversation you had, and any observations from your Summer 2020 experiences that affirm and/or challenge the author’s argument. 
+
+Week 6: Jul 18, 2022
+
+Read scientific literature and compiled data on the average age of transition among transgender communities
+Compiled data on how variables of interest vary across gender conforming and gender non-conforming individuals  
+Brainstormed ideas for title and thesis for poster and report
+Assigned likelihood on a scale of (Unsure, least likely, likely, most likely)  of individuals being gender non-confirming based on missing sex at birth and gender variables across the three surveys
+Created mosaic plot to compare variables of interest against the four categories of the  likelihood of being gender non confirming      
+Attended the second part of the QSIDE data scraping tutorial 
+
+
+Week 7: Jul 25, 2022
+
+Created a table and assigned likelihoods on a scale of  (Unsure, least likely, likely, most likely) of individuals being gender non-confirming based on missing sex at birth and gender variables across the three surveys
+Reviewed scientific literature for studies comparing aspects of mental health between gender confirming and non-confirming individuals
+Organized github repository 
+Updated the readme file with an outline for the report
+Organized the code and added comments          
 
