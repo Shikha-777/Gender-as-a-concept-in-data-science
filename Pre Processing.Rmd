@@ -1,0 +1,308 @@
+---
+title: "pre processing"
+output: html_document
+date: '2022-08-01'
+---
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(ggmosaic)
+```
+
+#1 Participation ID for participants who took part in all three surveys
+
+```{r}
+all_three=(da34375.0001) %>% filter(FU1_MARKER=="(1) Completed Wave",FU2_MARKER=="(1) Completed Wave", BL_MARKER=="(1) Completed Wave")%>% select(SU_ID)
+
+all_three
+
+```
+
+#2 Participation ID for participants who took part in baseline and first follow up survey
+
+```{r}
+first_two=(da34375.0001) %>% filter(FU1_MARKER=="(1) Completed Wave", BL_MARKER=="(1) Completed Wave")%>% select(SU_ID)
+
+first_two
+```
+
+#3 Participation ID for participants who took part in baseline and second follow up.
+
+```{r}
+first_last=(da34375.0001) %>% filter(FU2_MARKER=="(1) Completed Wave", BL_MARKER=="(1) Completed Wave")%>% mutate(Participation=c("First and Last"))%>%select(SU_ID,participation)
+
+first_last
+```
+
+#4 Participation ID for participants who took part in first follow up and second follow up.
+
+```{r}
+second_last=(da34375.0001) %>% filter(FU1_MARKER=="(1) Completed Wave", FU2_MARKER=="(1) Completed Wave")%>% mutate(participation=c("second and last"))%>%select(SU_ID,participation)
+
+second_last
+```
+
+
+#4 Creating a newdata set consisting of all columns from the original dataset along with a new "participation" column which tracks if the participant participated in "all three","first and last", "first two" or NA.
+
+```{r}
+df <- da34375.0001 %>% 
+mutate(Participation = case_when(
+  
+  ((FU2_MARKER=="(1) Completed Wave") & (BL_MARKER=="(1) Completed Wave")&(FU1_MARKER=="(1) Completed Wave")) ~ "All Three",
+
+    ((FU2_MARKER=="(1) Completed Wave") & (BL_MARKER=="(1) Completed Wave")&(FU1_MARKER=="(0) Did not complete")) ~ "First and Last",
+   
+    
+    
+    ((BL_MARKER=="(1) Completed Wave")&(FU1_MARKER=="(1) Completed Wave")&(FU2_MARKER=="(0) Did not complete")) ~ "First Two",
+
+   ((BL_MARKER=="(0) Did not complete")&(FU1_MARKER=="(1) Completed Wave")&(FU2_MARKER=="(1) Completed Wave")) ~ "Second and Last",
+  
+  TRUE~"NO"
+
+  
+  
+))
+
+df
+```
+
+#5 Check to see code #4 works accurately
+
+```{r}
+new<-df%>%select(Participation,SU_ID,BL_MARKER,FU1_MARKER,FU2_MARKER)
+new
+```
+
+#6 Filtering for "participation" column with"all three","first and last", "first two"
+
+```{r}
+new_dataset<- df %>%filter(Participation=="All Three"|Participation=="First and Last"|Participation=="First Two"|Participation=="Second and Last")%>%select(SU_ID, SEX_DB,BL_R_GENDER,FU1_R_GENDER,FU2_R_GENDER)%>%filter(SEX_DB=="(1) Male" & BL_R_GENDER=="(2) Female")
+ 
+new_dataset
+
+```
+
+#filtering m to f and f to m participants
+
+```{r}
+new_df <- (da34375.0001) %>% 
+mutate(transition = case_when(
+  
+  ((SEX_DB=="(1) Male") & (BL_R_GENDER
+=="(2) Female")) ~ "MtoF",
+
+   ((SEX_DB=="(2) Female") & (BL_R_GENDER
+=="(2) Male")) ~ "FtoM",
+ 
+   
+    (TRUE)~ "No"
+))
+new_df%>%select(transition)%>%filter(transition!="No")
+```
+
+#Looking for missing data
+```{r}
+new_dataset_1<- df %>%filter(Participation=="All Three"|Participation=="First and Last"|Participation=="First Two"|Participation=="Second and Last")%>%select(SEX_DB,SU_ID)%>%filter(SEX_DB!="(1) Male" & SEX_DB!="(2) Female")
+ 
+new_dataset_1
+
+```
+#From the filtered dataset identifying participants whose sex at birth is reported male
+```{r}
+new_dataset_2<- df %>%filter(Participation=="All Three"|Participation=="First and Last"|Participation=="First Two"|Participation=="Second and Last")%>%select(SU_ID,SEX_DB)%>%filter(SEX_DB=="(1) Male")
+
+new_dataset_2
+```
+
+#From the filtered dataset identifying participants whose sex at birth is reported male
+```{r}
+new_dataset_3<- df %>%filter(Participation=="All Three"|Participation=="First and Last"|Participation=="First Two"|Participation=="Second and Last")%>%select(SU_ID,SEX_DB)%>%filter(SEX_DB=="(2) Female")
+
+new_dataset_3
+```
+ 
+#Selecting columns based on variables of interest
+
+```{r}
+filtered_dataset<- df%>%filter(Participation=="All Three"|Participation=="First and Last"|Participation=="First Two"|Participation=="Second and Last")%>%select(SU_ID,SEX_DB,BL_R_GENDER,BL_GMSLEADR,BL_GMSLDACT,BL_FRNNCOLL,BL_GLEADER, BL_UDIFFFRN,BL_SESATISF,BL_LCGETAHD,BL_SEESTMWO,BL_SEDOWELL,BL_SEUSELES,BL_SENOGOOD,BL_LCPLANSW,BL_COMDEGRE,BL_UDIFFSCW,BL_UDIFFTIM,BL_UNDSOSTU, BL_SELFGOOD,BL_UDIFFFRN,BL_UNDSFAC,BL_UNDSOSTU,BL_LCNECNTR,BL_HSMATHYR,BL_HSSCIEYR,FU1_GMSLEADR,FU1_GLEADER,FU1_R_GENDER,FU1_APLYGRAD,FU1_GMSLDACT,FU1_UCULTURE,FU1_GLEADER,FU1_RGRPSSUP,FU1_POLPROG,FU1_DIFFSCHW,FU1_PPOTHR,FU1_DIFFSCHW,FU1_SOCDISCR,FU1_FACINAPP,FU1_SELFGOOD,FU1_LCNECNTR,FU1_SEESTMWO,FU1_SEDOWELL,FU1_LCGETAHD,FU1_AENOTWEL,FU1_AEMAKCOL,FU1_SESATISF,FU1_SEUSELES,FU1_SENPROUD,FU2_NOGRNOSC,FU2_GMSLDACT,FU2_HLTHINSR,FU2_SATCOWRK,FU2_OPPJOB,FU2_COMDIVRS,FU2_PNSADJUS,FU2_DESTLEAD,FU2_POSCULT,FU2_DIFFVIEW,FU2_BULDCOAL,FU2_VOTEELEC,FU2_PROMEQIT,FU2_R_GENDER,FU2_GMSLEADR)
+#%>%filter(SEX_DB=="(2) Female")
+
+filtered_dataset
+```
+
+# Identifying columns with not all "male" or "female" values for sex at birth and gender variable. Identifying missing values.
+
+```{r}
+new_dataset_7<- df %>%filter(Participation=="All Three"|Participation=="First and Last"|Participation=="First Two"|Participation=="Second and Last")%>%select(SEX_DB,SU_ID,BL_R_GENDER,FU1_R_GENDER,FU2_R_GENDER)%>%filter((SEX_DB=="(1) Male"&BL_R_GENDER=="(1) Male"&FU1_R_GENDER=="(1) Male"&FU2_R_GENDER=="(1) Male")|(SEX_DB=="(2) Female"&BL_R_GENDER=="(2) Female"&FU1_R_GENDER=="(2) Female"&FU2_R_GENDER=="(2) Female"))
+ 
+new_dataset_7
+
+```
+
+# Using the new dataset created prior to this to identify participants with atleast one of sex nad gender variable missing
+```{r}
+l<-df %>%filter(Participation=="All Three"|Participation=="First and Last"|Participation=="First Two"|Participation=="Second and Last")%>%select(SEX_DB,SU_ID,BL_R_GENDER,FU1_R_GENDER,FU2_R_GENDER)
+
+new_df<-anti_join(l,new_dataset_7,by="SU_ID")
+new_df
+
+```
+
+#Adding a new column that identifies participants when atleast one of sex and gender variable is missing
+
+```{r}
+new_df <- df %>% 
+mutate(unknown_sex = case_when(
+  
+  ((SEX_DB!="(1) Male") & (SEX_DB!="(2) Female"))~ "YES",
+   
+   TRUE~"NO"))
+
+new_df
+
+```
+
+#Selecting variables of interest for data visualization
+```{r}
+missing<- new_df %>%filter(Participation=="All Three"|Participation=="First and Last"|Participation=="First Two"|Participation=="Second and Last")%>%select(SU_ID,SEX_DB,BL_GMSLEADR,BL_GMSLDACT,BL_FRNNCOLL,BL_GLEADER,BL_UDIFFFRN,BL_SESATISF,BL_LCGETAHD,BL_SEESTMWO,BL_SEDOWELL,BL_SEUSELES,unknown_sex,BL_SENOGOOD,BL_LCPLANSW,BL_COMDEGRE,BL_UDIFFSCW,BL_UDIFFTIM,BL_UNDSOSTU, BL_SELFGOOD)
+
+missing
+```
+
+# Assigning likelihood of participants based on missing sex and gender variable in initial, baseline, first follow up, and second follow up study 
+
+```{r}
+new_df1 <- (filtered_dataset) %>% 
+mutate(weights = case_when(
+  
+  ((SEX_DB=="(3) Unknown") & (is.na(BL_R_GENDER)
+) & (FU1_R_GENDER=="(2) Female")& (FU2_R_GENDER=="(2) Female")) ~ "Most",
+
+((SEX_DB=="(3) Unknown") & (is.na(BL_R_GENDER)) & (FU1_R_GENDER=="(1) Male")& (FU2_R_GENDER=="(1) Male")) ~ "Most",
+
+   ((SEX_DB=="(3) Unknown") & (is.na(FU1_R_GENDER)) &(BL_R_GENDER=="(1) Male")&(FU2_R_GENDER=="(1) Male")) ~ "Least",
+
+ ((SEX_DB=="(3) Unknown") & (is.na(FU1_R_GENDER)) &(BL_R_GENDER=="(2)Female")&(FU2_R_GENDER=="(2) Female")) ~ "Least",
+
+((SEX_DB=="(3) Unknown") & (is.na(FU2_R_GENDER))& (FU1_R_GENDER=="(1)Male")&(BL_R_GENDER=="(1)Male")) ~ "Most",
+
+((SEX_DB=="(3) Unknown") & (is.na(FU2_R_GENDER))& (FU1_R_GENDER=="(2)Female")&(BL_R_GENDER=="(2)Female")) ~ "Most",
+
+
+((is.na(BL_R_GENDER)) & (is.na(FU2_R_GENDER)) & (SEX_DB=="(1) Male")& (FU1_R_GENDER=="(1)Male")) ~ "Most",
+
+((is.na(BL_R_GENDER)) & (is.na(FU2_R_GENDER)) & (SEX_DB=="(2) Female")& (FU1_R_GENDER=="(2)Female")) ~ "Most",
+
+((is.na(BL_R_GENDER)) & (is.na(FU1_R_GENDER))&(SEX_DB=="(1) Male")&(FU2_R_GENDER=="(1) Male")) ~ "Least",
+
+((is.na(BL_R_GENDER)) & (is.na(FU1_R_GENDER))&(SEX_DB=="(2)Female")&(FU2_R_GENDER=="(2) Female")) ~ "Least",
+ 
+ 
+((is.na(FU2_R_GENDER)) & (is.na(FU1_R_GENDER))&(SEX_DB=="(2) Female")&(BL_R_GENDER=="(2) Female")) ~ "Most",
+
+((is.na(FU2_R_GENDER)) & (is.na(FU1_R_GENDER))&(SEX_DB=="(1) Male")&(BL_R_GENDER=="(1) Male")) ~ "Most",
+ 
+ 
+((is.na(FU2_R_GENDER)) & (is.na(FU1_R_GENDER)) & (SEX_DB=="(3) Unknown")&(BL_R_GENDER=="(1) Male")) ~ "Most",
+
+((is.na(FU2_R_GENDER)) & (is.na(FU1_R_GENDER)) & (SEX_DB=="(3) Unknown")&(BL_R_GENDER=="(2) Female")) ~ "Most",
+
+((is.na(BL_R_GENDER)) & (is.na(FU1_R_GENDER)) & (SEX_DB=="(3) Unknown")&(FU2_R_GENDER=="(2) Female")) ~ "Most",
+
+((is.na(BL_R_GENDER)) & (is.na(FU1_R_GENDER)) & (SEX_DB=="(3) Unknown")&(FU2_R_GENDER=="(1) Male")) ~ "Most",
+
+ 
+ ((is.na(BL_R_GENDER)) & (is.na(FU1_R_GENDER)) & (is.na(FU2_R_GENDER))&(SEX_DB=="(1) Male")) ~ "Most",
+
+
+ ((is.na(BL_R_GENDER)) & (is.na(FU1_R_GENDER)) & (is.na(FU2_R_GENDER))&(SEX_DB=="(2) Female")) ~ "Most",
+ 
+((is.na(FU2_R_GENDER)) & (is.na(BL_R_GENDER)) & (SEX_DB=="(3) Unknown")& (FU1_R_GENDER=="(1)Male")) ~ "Most",
+
+((is.na(FU2_R_GENDER)) & (is.na(BL_R_GENDER)) & (SEX_DB=="(3) Unknown")& (FU1_R_GENDER=="(2)Female")) ~ "Most",
+
+((FU2_R_GENDER=="(1) Male") & (BL_R_GENDER
+=="(1) Male") & (SEX_DB=="(3) Unknown")& (FU1_R_GENDER=="(1)Male")) ~ "Most",
+
+((FU2_R_GENDER=="(2) Female") & (BL_R_GENDER
+=="(2) Female") & (SEX_DB=="(3) Unknown")& (FU1_R_GENDER=="(2) Female")) ~ "Most",
+
+((FU2_R_GENDER=="(2) Female") & (is.na(BL_R_GENDER)) & (SEX_DB=="(2) Female")& (FU1_R_GENDER=="(2) Female")) ~ "Least",
+
+((FU2_R_GENDER=="(1) Male") & (is.na(BL_R_GENDER)) & (SEX_DB=="(1) Male")& (FU1_R_GENDER=="(1) Male")) ~ "Least",
+
+((FU2_R_GENDER=="(1) Male") & (BL_R_GENDER=="(1) Male")  & (SEX_DB=="(1) Male")& (is.na(FU1_R_GENDER))) ~ "Least",
+
+((FU2_R_GENDER=="(2) Female") & (BL_R_GENDER
+=="(2) Female")  & (SEX_DB=="(2) Female")& (is.na(FU1_R_GENDER))) ~ "Least",
+
+((is.na(FU2_R_GENDER)) & (BL_R_GENDER
+=="(1) Male")  & (SEX_DB=="(1) Male")& (FU1_R_GENDER=="(1) Male")) ~ "Most",
+
+(is.na(FU2_R_GENDER) & (BL_R_GENDER
+=="(2) Female")  & (SEX_DB=="(2) Female")& (FU1_R_GENDER=="(2) Female")) ~ "Most",
+
+#(SEX_DB=="(3) Unknown") ~ "More",
+
+
+   
+    (TRUE)~ "No"
+))
+
+new_df1%>%select(weights,SEX_DB,FU1_R_GENDER,BL_R_GENDER,FU2_R_GENDER)
+
+```
+
+# Identifying participants who have transitioned from male to female or female to male
+```{r}
+
+new_df2 <- (new_df1) %>% 
+mutate(Transition = case_when(
+  
+  ((SEX_DB=="(1) Male") & ((BL_R_GENDER
+!=NA)|(BL_R_GENDER!="(1) Male"))) ~ "Yes",
+
+((SEX_DB=="(2) Female") & ((BL_R_GENDER
+!=NA)|(BL_R_GENDER!="(2) Female"))) ~ "Yes",
+
+((SEX_DB=="(2) Female") & ((FU1_R_GENDER
+!=NA)|(FU1_R_GENDER!="(2) Female"))) ~ "Yes",
+
+ ((SEX_DB=="(1) Male") & ((FU1_R_GENDER
+!=NA)|(FU1_R_GENDER!="(1) Male"))) ~ "Yes",
+
+((SEX_DB=="(1) Male") & ((FU2_R_GENDER
+!=NA)|(FU2_R_GENDER!="(1) Male"))) ~ "Yes",
+
+((SEX_DB=="(2) Female") & ((FU2_R_GENDER
+!=NA)|(FU2_R_GENDER!="(2) Female"))) ~ "Yes",
+
+((BL_R_GENDER=="(1) Male") & ((FU1_R_GENDER
+!=NA)|(FU1_R_GENDER!="(1) Male"))) ~ "Yes",
+
+((BL_R_GENDER=="(2) Female") & ((FU1_R_GENDER
+!=NA)|(FU1_R_GENDER!="(2) Female"))) ~ "Yes",
+
+((BL_R_GENDER=="(1) Male") & ((FU2_R_GENDER
+!=NA)|(FU2_R_GENDER!="(1) Male"))) ~ "Yes",
+
+((BL_R_GENDER=="(2) Female") & ((FU2_R_GENDER
+!=NA)|(FU2_R_GENDER!="(2) Female"))) ~ "Yes",
+
+((FU1_R_GENDER=="(1) Male") & ((FU2_R_GENDER
+!=NA)|(FU2_R_GENDER!="(1) Male"))) ~ "Yes",
+
+((FU1_R_GENDER=="(2) Female") & ((FU2_R_GENDER
+!=NA)|(FU2_R_GENDER!="(2) Female"))) ~ "Yes",
+
+(TRUE)~ "No"
+))
+
+new_df2%>%select(Transition)%>%filter(Transition=="No")
+
+```
+
+
